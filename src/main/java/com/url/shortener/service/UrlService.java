@@ -21,7 +21,10 @@ public class UrlService {
                 .map(UrlEntity::getShortUrl)
                 .orElseGet(() -> {
                     String shortUrl = generateHash(originalUrl);
-                    urlRepository.save(new UrlEntity(null, originalUrl, shortUrl));
+                    urlRepository.save(UrlEntity.builder()
+                            .originalUrl(originalUrl)
+                            .shortUrl(shortUrl)
+                            .build());
                     return shortUrl;
                 });
     }
