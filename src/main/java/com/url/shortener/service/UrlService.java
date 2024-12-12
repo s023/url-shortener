@@ -5,16 +5,17 @@ import org.springframework.stereotype.Service;
 
 import com.url.shortener.model.entity.UrlEntity;
 import com.url.shortener.model.repository.UrlRepository;
-
-import java.util.Base64;
+import com.url.shortener.util.SnowflakeIdGenerator;
 
 @Service
 public class UrlService {
+    private final SnowflakeIdGenerator idGenerator;
 
     private final UrlRepository urlRepository;
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
+        this.idGenerator = new SnowflakeIdGenerator(1L, 1L);
     }
 
     @Cacheable(value = "shortenedUrls", key = "#originalUrl")
@@ -22,7 +23,8 @@ public class UrlService {
         return urlRepository.findByOriginalUrl(originalUrl)
                 .map(UrlEntity::getShortUrl)
                 .orElseGet(() -> {
-                    String shortUrl = generateHash(originalUrl);
+                    long id = idGenerator.nextId();
+                    String shortUrl = Long.toString(id, 36);
                     urlRepository.save(UrlEntity.builder()
                             .originalUrl(originalUrl)
                             .shortUrl(shortUrl)
@@ -36,10 +38,6 @@ public class UrlService {
         return urlRepository.findByShortUrl(shortUrl)
                 .map(UrlEntity::getOriginalUrl)
                 .orElseThrow(() -> new RuntimeException("URL not found!"));
-    }
-
-    private String generateHash(String url) {
-        return Base64.getUrlEncoder().encodeToString(url.getBytes()).substring(0, 8);
     }
 }
 

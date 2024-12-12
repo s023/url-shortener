@@ -6,8 +6,6 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import com.url.shortener.model.entity.UrlEntity;
 import com.url.shortener.model.repository.UrlRepository;
@@ -44,7 +42,7 @@ class UrlServiceTest {
         String result = urlService.shortenUrl(originalUrl);
 
         // Assert
-        assertEquals(8, result.length());
+        assertEquals(12, result.length());
         verify(urlRepository, times(1)).save(any(UrlEntity.class));
     }
 
