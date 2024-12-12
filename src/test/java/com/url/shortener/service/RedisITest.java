@@ -3,6 +3,7 @@ package com.url.shortener.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,10 +18,16 @@ public class RedisITest {
     @Autowired
     private UrlService urlService;
 
+    @BeforeEach
+    void clearRedisCache() {
+        redisTemplate.getConnectionFactory().getConnection().flushDb();
+    }
+
+
     @Test
     void testRedisCaching() {
         // Arrange
-        String originalUrl = "https://example1.com";
+        String originalUrl = "https://example2.com";
 
         // Act
         String shortUrl = urlService.shortenUrl(originalUrl);
