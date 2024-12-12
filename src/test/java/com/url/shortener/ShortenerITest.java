@@ -26,7 +26,7 @@ class ShortenerITest {
 
     @Test
     void testShortenUrl() throws Exception {
-        UrlRequest request = new UrlRequest("https://test-example.com");
+        UrlRequest request = new UrlRequest("https://example.com");
         mockMvc.perform(post("/api/v1/shorten")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -37,7 +37,7 @@ class ShortenerITest {
     @Test
     void testResolveUrl() throws Exception {
         // First, shorten the URL
-        UrlRequest request = new UrlRequest("https://test-example.com");
+        UrlRequest request = new UrlRequest("https://example.com");
         String response = mockMvc.perform(post("/api/v1/shorten")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

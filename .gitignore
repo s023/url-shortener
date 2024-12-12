@@ -41,3 +41,9 @@ build/
 **/META-INF/MANIFEST.MF
 
 *.log
+
+# Exclude Redis persistence files
+appendonlydir/
+dump.rdb
+*.aof
+*.rdb

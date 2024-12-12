@@ -1,5 +1,6 @@
 package com.url.shortener.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.url.shortener.model.entity.UrlEntity;
@@ -16,6 +17,7 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
+    @Cacheable(value = "shortenedUrls", key = "#originalUrl")
     public String shortenUrl(String originalUrl) {
         return urlRepository.findByOriginalUrl(originalUrl)
                 .map(UrlEntity::getShortUrl)
@@ -29,6 +31,7 @@ public class UrlService {
                 });
     }
 
+    @Cacheable(value = "originalUrls", key = "#shortUrl")
     public String resolveUrl(String shortUrl) {
         return urlRepository.findByShortUrl(shortUrl)
                 .map(UrlEntity::getOriginalUrl)

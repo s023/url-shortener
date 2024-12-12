@@ -6,13 +6,15 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.url.shortener.model.entity.UrlEntity;
 import com.url.shortener.model.repository.UrlRepository;
 
 class UrlServiceTest {
-    private final UrlRepository urlRepository = mock(UrlRepository.class); // Mocked repository
-    private final UrlService urlService = new UrlService(urlRepository);   // Service under test
+    private final UrlRepository urlRepository = mock(UrlRepository.class);
+    private final UrlService urlService = new UrlService(urlRepository);
 
     @Test
     void testShortenUrlWhenUrlAlreadyExists() {
@@ -28,7 +30,7 @@ class UrlServiceTest {
         // Assert
         assertEquals(shortUrl, result);
         verify(urlRepository, times(1)).findByOriginalUrl(originalUrl);
-        verify(urlRepository, never()).save(any()); // No new entity should be saved
+        verify(urlRepository, never()).save(any());
     }
 
     @Test
@@ -76,5 +78,4 @@ class UrlServiceTest {
         }
         verify(urlRepository, times(1)).findByShortUrl(shortUrl);
     }
-
 }
